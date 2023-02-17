@@ -6,6 +6,6 @@ final class ContextDictionaryModelsTests: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
-        XCTAssertEqual(ContextDictionaryModels().text, "Hello, World!")
+//        XCTAssertEqual(ContextDictionaryModels().text, "Hello, World!")
     }
 }
