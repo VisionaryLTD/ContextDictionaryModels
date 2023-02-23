@@ -24,13 +24,29 @@ public extension DictionaryCodable {
 }
 
 public extension DictionaryCodable {
+    struct SenseLabel: Codable, Hashable {
+        public enum Kind: String, Codable {
+            case label, grammarTrait
+        }
+        
+        public var id: String
+        public var text: String
+        public var kind: Kind
+        
+        public init(id: String, text: String, kind: Kind) {
+            self.id = id
+            self.text = text
+            self.kind = kind
+        }
+    }
+    
     struct SenseExample: Codable {
         public var id: String
         public var summary: String
         public var text: [String]
-        public var labels: [CDSenseLabel]
+        public var labels: [SenseLabel]
         
-        public init(id: String, summary: String, text: [String], labels: [CDSenseLabel]) {
+        public init(id: String, summary: String, text: [String], labels: [SenseLabel]) {
             self.id = id
             self.summary = summary
             self.text = text
@@ -41,17 +57,15 @@ public extension DictionaryCodable {
     struct Sense: Codable {
         public var id: String
         public var text: String
-        public var grammarTraits: [CDGrammarTrait]
-        public var senseLabels: [CDSenseLabel]
+        public var senseLabels: [SenseLabel]
         public var synonyms: [String]
         public var opposites: [String]
         public var examples: [SenseExample]
         public var children: [Sense]
         
-        public init(id: String, text: String, grammarTraits: [CDGrammarTrait], senseLabels: [CDSenseLabel], synonyms: [String], opposites: [String], examples: [SenseExample], children: [Sense]) {
+        public init(id: String, text: String, senseLabels: [SenseLabel], synonyms: [String], opposites: [String], examples: [SenseExample], children: [Sense]) {
             self.id = id
             self.text = text
-            self.grammarTraits = grammarTraits
             self.senseLabels = senseLabels
             self.synonyms = synonyms
             self.opposites = opposites
