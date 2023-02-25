@@ -24,6 +24,28 @@ public extension DictionaryCodable {
 }
 
 public extension DictionaryCodable {
+    struct Text: Codable {
+        public var id: String
+        public var rawText: String
+        public var attributedString: AttributedString?
+        public var lang: Lang
+        public var translations: [Text]
+        
+        public init(id: String = UUID().uuidString, rawText: String = "", attributedString: AttributedString? = nil, lang: Lang = .en, translations: [Text] = []) {
+            self.id = id
+            self.rawText = rawText
+            self.attributedString = attributedString
+            self.lang = lang
+            self.translations = translations
+        }
+        
+        public enum Lang: String, Codable {
+            case en, zh
+        }
+    }
+}
+
+public extension DictionaryCodable {
     struct SenseLabel: Codable, Hashable {
         public enum Kind: String, Codable {
             case label, grammarTrait
@@ -43,10 +65,10 @@ public extension DictionaryCodable {
     struct SenseExample: Codable {
         public var id: String
         public var summary: String
-        public var text: [String]
+        public var text: [Text]
         public var labels: [SenseLabel]
         
-        public init(id: String, summary: String, text: [String], labels: [SenseLabel]) {
+        public init(id: String, summary: String, text: [Text], labels: [SenseLabel]) {
             self.id = id
             self.summary = summary
             self.text = text
@@ -56,14 +78,14 @@ public extension DictionaryCodable {
     
     struct Sense: Codable {
         public var id: String
-        public var text: String
+        public var text: Text
         public var senseLabels: [SenseLabel]
         public var synonyms: [String]
         public var opposites: [String]
         public var examples: [SenseExample]
         public var children: [Sense]
         
-        public init(id: String, text: String, senseLabels: [SenseLabel], synonyms: [String], opposites: [String], examples: [SenseExample], children: [Sense]) {
+        public init(id: String, text: Text, senseLabels: [SenseLabel], synonyms: [String], opposites: [String], examples: [SenseExample], children: [Sense]) {
             self.id = id
             self.text = text
             self.senseLabels = senseLabels
