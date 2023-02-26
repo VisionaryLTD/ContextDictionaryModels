@@ -9,8 +9,10 @@ import Foundation
 
 public enum DictionaryCodable {}
 
+typealias DicationaryCodableKind = Codable & Hashable
+
 public extension DictionaryCodable {
-    struct Entry: Codable {
+    struct Entry: DicationaryCodableKind {
         public var id: String
         public var text: String
         public var definitionGroups: [DefinitionGroup]
@@ -24,30 +26,47 @@ public extension DictionaryCodable {
 }
 
 public extension DictionaryCodable {
-    struct Text: Codable {
+    struct Text: DicationaryCodableKind {
         public var id: String
         public var rawText: String
         public var attributedString: AttributedString?
         public var lang: Lang
-        public var translations: [Text]
+        /// Translations of the text
+        ///
+        /// Due to a struct can't contain recursive property, so makes it an array.
+        var translations: [Text]
         
-        public init(id: String = UUID().uuidString, rawText: String = "", attributedString: AttributedString? = nil, lang: Lang = .en, translations: [Text] = []) {
+        public var translation: Text? {
+            get {
+                translations.first
+            }
+            
+            set {
+                translations = [newValue].compactMap { $0 }
+            }
+        }
+        
+        public var unwrappedAttributedString: AttributedString {
+            attributedString ?? .init(rawText)
+        }
+        
+        public init(id: String = UUID().uuidString, rawText: String = "", attributedString: AttributedString? = nil, lang: Lang = .en, translation: Text? = nil) {
             self.id = id
             self.rawText = rawText
             self.attributedString = attributedString
             self.lang = lang
-            self.translations = translations
+            self.translations = [translation].compactMap { $0 }
         }
         
-        public enum Lang: String, Codable {
+        public enum Lang: String, DicationaryCodableKind {
             case en, zh
         }
     }
 }
 
 public extension DictionaryCodable {
-    struct SenseLabel: Codable, Hashable {
-        public enum Kind: String, Codable {
+    struct SenseLabel: DicationaryCodableKind {
+        public enum Kind: String, DicationaryCodableKind {
             case label, grammarTrait
         }
         
@@ -62,21 +81,26 @@ public extension DictionaryCodable {
         }
     }
     
-    struct SenseExample: Codable {
+    struct SenseExample: DicationaryCodableKind {
         public var id: String
         public var summary: String
-        public var text: [Text]
+        public var texts: [Text]
         public var labels: [SenseLabel]
         
-        public init(id: String, summary: String, text: [Text], labels: [SenseLabel]) {
+        public var text: Text! {
+            get { texts.first }
+            set { texts = [newValue].compactMap { $0 } }
+        }
+        
+        public init(id: String, summary: String, text: Text, labels: [SenseLabel]) {
             self.id = id
             self.summary = summary
-            self.text = text
+            self.texts = [text]
             self.labels = labels
         }
     }
     
-    struct Sense: Codable {
+    struct Sense: DicationaryCodableKind {
         public var id: String
         public var text: Text
         public var senseLabels: [SenseLabel]
@@ -85,7 +109,7 @@ public extension DictionaryCodable {
         public var examples: [SenseExample]
         public var children: [Sense]
         
-        public init(id: String, text: Text, senseLabels: [SenseLabel], synonyms: [String], opposites: [String], examples: [SenseExample], children: [Sense]) {
+        public init(id: String = UUID().uuidString, text: Text = .init(), senseLabels: [SenseLabel] = [], synonyms: [String] = [], opposites: [String] = [], examples: [SenseExample] = [], children: [Sense] = []) {
             self.id = id
             self.text = text
             self.senseLabels = senseLabels
@@ -96,7 +120,7 @@ public extension DictionaryCodable {
         }
     }
     
-    struct DefinitionGroup: Codable {
+    struct DefinitionGroup: DicationaryCodableKind {
         public var id: String
         public var partOfSpeech: CDPartOfSpeech?
         public var senses: [Sense]
