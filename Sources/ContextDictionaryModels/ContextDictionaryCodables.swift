@@ -6,6 +6,9 @@
 //
 
 import Foundation
+#if canImport(UIKit)
+import UIKit
+#endif
 
 public enum DictionaryCodable {}
 
@@ -57,6 +60,22 @@ public extension DictionaryCodable {
             self.lang = lang
             self.translations = [translation].compactMap { $0 }
         }
+        
+        #if canImport(UIKit)
+        public init(id: String = UUID().uuidString, htmlString: String, lang: Lang = .en, translation: Text? = nil) throws {
+            self.id = id
+            
+            let htmlData = htmlString.data(using: .utf8)!
+            let nsAttributedString = try NSAttributedString(data: htmlData, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil)
+            var attributedString = AttributedString(nsAttributedString)
+            attributedString.font = attributedString.font?.withSize(UIFont.preferredFont(forTextStyle: .body).pointSize)
+            
+            self.rawText = nsAttributedString.string
+            self.attributedString = attributedString
+            self.lang = lang
+            self.translations = [translation].compactMap { $0 }
+        }
+        #endif
         
         public enum Lang: String, DicationaryCodableKind {
             case en, zh
