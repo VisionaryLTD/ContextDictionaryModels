@@ -20,7 +20,7 @@ public extension DictionaryCodable {
         public var text: String
         public var definitionGroups: [DefinitionGroup]
         
-        public init(id: String, text: String, definitionGroups: [DefinitionGroup]) {
+        public init(id: String, text: String = "", definitionGroups: [DefinitionGroup] = []) {
             self.id = id
             self.text = text
             self.definitionGroups = definitionGroups
@@ -53,7 +53,7 @@ public extension DictionaryCodable {
             attributedString ?? .init(rawText)
         }
         
-        public init(id: String = UUID().uuidString, rawText: String = "", attributedString: AttributedString? = nil, lang: Lang = .en, translation: Text? = nil) {
+        public init(id: String, rawText: String = "", attributedString: AttributedString? = nil, lang: Lang = .en, translation: Text? = nil) {
             self.id = id
             self.rawText = rawText
             self.attributedString = attributedString
@@ -93,7 +93,7 @@ public extension DictionaryCodable {
         public var text: String
         public var kind: Kind
         
-        public init(id: String, text: String, kind: Kind) {
+        public init(id: String, text: String = "", kind: Kind = .label) {
             self.id = id
             self.text = text
             self.kind = kind
@@ -112,7 +112,7 @@ public extension DictionaryCodable {
             set { texts = [newValue].compactMap { $0 } }
         }
         
-        public init(id: String = UUID().uuidString, summary: String = "", text: Text = .init(), labels: [SenseLabel] = [], children: [SenseExample] = []) {
+        public init(id: String, summary: String = "", text: Text = .init(id: UUID().uuidString), labels: [SenseLabel] = [], children: [SenseExample] = []) {
             self.id = id
             self.summary = summary
             self.texts = [text]
@@ -130,7 +130,7 @@ public extension DictionaryCodable {
         public var examples: [SenseExample]
         public var children: [Sense]
         
-        public init(id: String = UUID().uuidString, text: Text = .init(), senseLabels: [SenseLabel] = [], synonyms: [String] = [], opposites: [String] = [], examples: [SenseExample] = [], children: [Sense] = []) {
+        public init(id: String, text: Text = .init(id: UUID().uuidString), senseLabels: [SenseLabel] = [], synonyms: [String] = [], opposites: [String] = [], examples: [SenseExample] = [], children: [Sense] = []) {
             self.id = id
             self.text = text
             self.senseLabels = senseLabels
@@ -146,7 +146,7 @@ public extension DictionaryCodable {
         public var partOfSpeech: CDPartOfSpeech?
         public var senses: [Sense]
         
-        public init(id: String, partOfSpeech: CDPartOfSpeech? = nil, senses: [Sense]) {
+        public init(id: String, partOfSpeech: CDPartOfSpeech? = nil, senses: [Sense] = []) {
             self.id = id
             self.partOfSpeech = partOfSpeech
             self.senses = senses
