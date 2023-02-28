@@ -105,17 +105,19 @@ public extension DictionaryCodable {
         public var summary: String
         public var texts: [Text]
         public var labels: [SenseLabel]
+        public var children: [SenseExample]
         
         public var text: Text! {
             get { texts.first }
             set { texts = [newValue].compactMap { $0 } }
         }
         
-        public init(id: String, summary: String, text: Text, labels: [SenseLabel]) {
+        public init(id: String = UUID().uuidString, summary: String = "", text: Text = .init(), labels: [SenseLabel] = [], children: [SenseExample] = []) {
             self.id = id
             self.summary = summary
             self.texts = [text]
             self.labels = labels
+            self.children = children
         }
     }
     
