@@ -123,6 +123,7 @@ public extension DictionaryCodable {
     
     struct Sense: DicationaryCodableKind {
         public var id: String
+        public var parentID: String?
         public var text: Text
         public var senseLabels: [SenseLabel]
         public var synonyms: [String]
