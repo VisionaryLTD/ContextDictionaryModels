@@ -55,6 +55,7 @@ public enum CDPartOfSpeech: String, CaseIterable, Codable, Hashable {
     case preposition
     case pronoun
     case interjection
+    case idiom
 }
 
 public enum CDEntryType: String, CaseIterable, Codable, Hashable {

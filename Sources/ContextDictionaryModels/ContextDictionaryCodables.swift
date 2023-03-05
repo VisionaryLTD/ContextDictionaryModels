@@ -16,13 +16,19 @@ typealias DicationaryCodableKind = Codable & Hashable
 
 public extension DictionaryCodable {
     struct Entry: DicationaryCodableKind {
+        public enum Kind: DicationaryCodableKind {
+            case word, phrasalVerb, idiom
+        }
+        
         public var id: String
         public var text: String
+        public var kind: Kind
         public var definitionGroups: [DefinitionGroup]
         
-        public init(id: String, text: String = "", definitionGroups: [DefinitionGroup] = []) {
+        public init(id: String, text: String = "", kind: Kind = .word, definitionGroups: [DefinitionGroup] = []) {
             self.id = id
             self.text = text
+            self.kind = kind
             self.definitionGroups = definitionGroups
         }
     }
@@ -146,11 +152,13 @@ public extension DictionaryCodable {
         public var id: String
         public var partOfSpeech: CDPartOfSpeech?
         public var senses: [Sense]
+        public var idioms: [Entry]
         
-        public init(id: String, partOfSpeech: CDPartOfSpeech? = nil, senses: [Sense] = []) {
+        public init(id: String, partOfSpeech: CDPartOfSpeech? = nil, senses: [Sense] = [], idioms: [Entry] = []) {
             self.id = id
             self.partOfSpeech = partOfSpeech
             self.senses = senses
+            self.idioms = idioms
         }
     }
 }
