@@ -16,7 +16,7 @@ typealias DicationaryCodableKind = Codable & Hashable
 
 public extension DictionaryCodable {
     struct Entry: DicationaryCodableKind {
-        public enum Kind: DicationaryCodableKind {
+        public enum Kind: String, DicationaryCodableKind {
             case word, phrasalVerb, idiom
         }
         
