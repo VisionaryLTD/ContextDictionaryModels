@@ -23,12 +23,14 @@ public extension DictionaryCodable {
         public var id: String
         public var text: String
         public var kind: Kind
+        public var alias: [String]
         public var definitionGroups: [DefinitionGroup]
         
-        public init(id: String, text: String = "", kind: Kind = .word, definitionGroups: [DefinitionGroup] = []) {
+        public init(id: String, text: String = "", kind: Kind = .word, alias: [String] = [], definitionGroups: [DefinitionGroup] = []) {
             self.id = id
             self.text = text
             self.kind = kind
+            self.alias = alias
             self.definitionGroups = definitionGroups
         }
     }
@@ -153,12 +155,14 @@ public extension DictionaryCodable {
         public var partOfSpeech: CDPartOfSpeech?
         public var senses: [Sense]
         public var idioms: [Entry]
+        public var phrasalVerbs: [Entry]
         
-        public init(id: String, partOfSpeech: CDPartOfSpeech? = nil, senses: [Sense] = [], idioms: [Entry] = []) {
+        public init(id: String, partOfSpeech: CDPartOfSpeech? = nil, senses: [Sense] = [], idioms: [Entry] = [], phrasalVerbs: [Entry] = []) {
             self.id = id
             self.partOfSpeech = partOfSpeech
             self.senses = senses
             self.idioms = idioms
+            self.phrasalVerbs = phrasalVerbs
         }
     }
 }
