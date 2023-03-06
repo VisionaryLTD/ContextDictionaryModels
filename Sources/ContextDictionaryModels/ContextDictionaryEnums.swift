@@ -49,6 +49,7 @@ public enum CDPartOfSpeech: String, CaseIterable, Codable, Hashable {
     case adjective
     case definiteArticle
     case indefiniteArticle
+    case infinitiveMarker
     case phrasalVerb
     case modalVerb
     case exclamation
@@ -56,6 +57,12 @@ public enum CDPartOfSpeech: String, CaseIterable, Codable, Hashable {
     case pronoun
     case interjection
     case idiom
+    case conjunction
+    case determiner
+    case number
+    case none
+    case abbreviation
+    case symbol
 }
 
 public enum CDEntryType: String, CaseIterable, Codable, Hashable {
