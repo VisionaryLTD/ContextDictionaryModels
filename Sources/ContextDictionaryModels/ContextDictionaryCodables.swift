@@ -160,13 +160,29 @@ public extension DictionaryCodable {
         public var senses: [Sense]
         public var idioms: [Entry]
         public var phrasalVerbs: [Entry]
+        public var pronunciations: [Pronunciation]
         
-        public init(id: String, partOfSpeech: CDPartOfSpeech? = nil, senses: [Sense] = [], idioms: [Entry] = [], phrasalVerbs: [Entry] = []) {
+        public init(id: String, partOfSpeech: CDPartOfSpeech? = nil, senses: [Sense] = [], idioms: [Entry] = [], phrasalVerbs: [Entry] = [], pronunciations: [Pronunciation] = []) {
             self.id = id
             self.partOfSpeech = partOfSpeech
             self.senses = senses
             self.idioms = idioms
             self.phrasalVerbs = phrasalVerbs
+            self.pronunciations = pronunciations
+        }
+    }
+    
+    struct Pronunciation: DicationaryCodableKind {
+        public var id: String
+        public var geoKind: String
+        public var phoneticAlphabet: String
+        public var url: URL?
+        
+        public init(id: String, geoKind: String = "", phoneticAlphabet: String = "", url: URL? = nil) {
+            self.id = id
+            self.geoKind = geoKind
+            self.phoneticAlphabet = phoneticAlphabet
+            self.url = url
         }
     }
 }
