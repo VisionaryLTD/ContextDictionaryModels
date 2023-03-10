@@ -136,15 +136,17 @@ public extension DictionaryCodable {
         public var senseLabels: [SenseLabel]
         public var synonyms: [String]
         public var opposites: [String]
+        public var relatedEntries: [String]
         public var examples: [SenseExample]
         public var children: [Sense]
         
-        public init(id: String, text: Text = .init(id: UUID().uuidString), senseLabels: [SenseLabel] = [], synonyms: [String] = [], opposites: [String] = [], examples: [SenseExample] = [], children: [Sense] = []) {
+        public init(id: String, text: Text = .init(id: UUID().uuidString), senseLabels: [SenseLabel] = [], synonyms: [String] = [], opposites: [String] = [], relatedEntries: [String] = [], examples: [SenseExample] = [], children: [Sense] = []) {
             self.id = id
             self.text = text
             self.senseLabels = senseLabels
             self.synonyms = synonyms
             self.opposites = opposites
+            self.relatedEntries = relatedEntries
             self.examples = examples
             self.children = children
         }
