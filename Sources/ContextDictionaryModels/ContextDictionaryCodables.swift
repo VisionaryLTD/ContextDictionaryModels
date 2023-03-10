@@ -23,14 +23,14 @@ public extension DictionaryCodable {
         public var id: String
         public var text: String
         public var kind: Kind
-        public var alias: [String]
+        public var origin: String?
         public var definitionGroups: [DefinitionGroup]
         
-        public init(id: String, text: String = "", kind: Kind = .word, alias: [String] = [], definitionGroups: [DefinitionGroup] = []) {
+        public init(id: String, text: String = "", kind: Kind = .word, origin: String? = nil, definitionGroups: [DefinitionGroup] = []) {
             self.id = id
             self.text = text
             self.kind = kind
-            self.alias = alias
+            self.origin = origin
             self.definitionGroups = definitionGroups
         }
     }
