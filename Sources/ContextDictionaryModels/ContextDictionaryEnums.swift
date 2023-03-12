@@ -63,6 +63,12 @@ public enum CDPartOfSpeech: String, CaseIterable, Codable, Hashable {
     case none
     case abbreviation
     case symbol
+    case suffix
+    case prefix
+    case combiningForm
+    case shortForm
+    
+    case unknown
 }
 
 public enum CDEntryType: String, CaseIterable, Codable, Hashable {
