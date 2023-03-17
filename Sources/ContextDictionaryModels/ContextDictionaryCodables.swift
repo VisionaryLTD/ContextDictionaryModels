@@ -139,10 +139,10 @@ public extension DictionaryCodable {
         public var opposites: [String]
         public var relatedEntries: [String]
         public var examples: [SenseExample]
-        public var likedCount: Int
+        public var likedCount: Int?
         public var children: [Sense]
         
-        public init(id: String, text: Text = .init(id: UUID().uuidString), usageText: String? = nil, senseLabels: [SenseLabel] = [], synonyms: [String] = [], opposites: [String] = [], relatedEntries: [String] = [], examples: [SenseExample] = [], likedCount: Int = 0, children: [Sense] = []) {
+        public init(id: String, text: Text = .init(id: UUID().uuidString), usageText: String? = nil, senseLabels: [SenseLabel] = [], synonyms: [String] = [], opposites: [String] = [], relatedEntries: [String] = [], examples: [SenseExample] = [], likedCount: Int? = nil, children: [Sense] = []) {
             self.id = id
             self.text = text
             self.usageText = usageText
