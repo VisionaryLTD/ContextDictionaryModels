@@ -134,7 +134,8 @@ public extension DictionaryCodable {
         public var parentID: String?
         public var text: Text
         public var usageText: String?
-        public var senseLabels: [SenseLabel]
+        public var labels: [String]
+        public var grammarTraitLabels: [String]
         public var synonyms: [String]
         public var opposites: [String]
         public var relatedEntries: [String]
@@ -142,16 +143,17 @@ public extension DictionaryCodable {
         public var likedCount: Int?
         public var children: [Sense]
         
-        public init(id: String, text: Text = .init(id: UUID().uuidString), usageText: String? = nil, senseLabels: [SenseLabel] = [], synonyms: [String] = [], opposites: [String] = [], relatedEntries: [String] = [], examples: [SenseExample] = [], likedCount: Int? = nil, children: [Sense] = []) {
+        public init(id: String, text: Text = .init(id: UUID().uuidString), usageText: String? = nil, labels: [String] = [], grammarTraitLabels: [String] = [], synonyms: [String] = [], opposites: [String] = [], relatedEntries: [String] = [], examples: [SenseExample] = [], likedCount: Int? = nil, children: [Sense] = []) {
             self.id = id
             self.text = text
             self.usageText = usageText
-            self.senseLabels = senseLabels
             self.synonyms = synonyms
             self.opposites = opposites
             self.relatedEntries = relatedEntries
             self.examples = examples
             self.likedCount = likedCount
+            self.labels = labels
+            self.grammarTraitLabels = grammarTraitLabels
             self.children = children
         }
     }
