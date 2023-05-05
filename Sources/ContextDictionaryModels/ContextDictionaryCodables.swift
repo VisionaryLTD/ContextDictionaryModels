@@ -15,6 +15,16 @@ public enum DictionaryCodable {}
 typealias DicationaryCodableKind = Codable & Hashable
 
 public extension DictionaryCodable {
+    struct Dictionary: DicationaryCodableKind {
+        public var id: String
+        public var title: String
+        
+        public init(id: String, title: String) {
+            self.id = id
+            self.title = title
+        }
+    }
+    
     struct Entry: DicationaryCodableKind {
         public enum Kind: String, DicationaryCodableKind {
             case word, phrasalVerb, idiom
