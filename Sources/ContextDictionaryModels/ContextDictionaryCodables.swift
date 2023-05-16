@@ -36,12 +36,16 @@ public extension DictionaryCodable {
         public var origin: String?
         public var definitionGroups: [DefinitionGroup]
         
-        public init(id: String, text: String = "", kind: Kind = .word, origin: String? = nil, definitionGroups: [DefinitionGroup] = []) {
+        /// Text in Markdown to display some additional information about the entry, such as concise senses of the entry.
+        public var additionalMDText: String
+        
+        public init(id: String, text: String = "", kind: Kind = .word, origin: String? = nil, definitionGroups: [DefinitionGroup] = [], additionalMDText: String = "") {
             self.id = id
             self.text = text
             self.kind = kind
             self.origin = origin
             self.definitionGroups = definitionGroups
+            self.additionalMDText = additionalMDText
         }
     }
 }
@@ -102,27 +106,10 @@ public extension DictionaryCodable {
 }
 
 public extension DictionaryCodable {
-    struct SenseLabel: DicationaryCodableKind {
-        public enum Kind: String, DicationaryCodableKind {
-            case label, grammarTrait
-        }
-        
-        public var id: String
-        public var text: String
-        public var kind: Kind
-        
-        public init(id: String, text: String = "", kind: Kind = .label) {
-            self.id = id
-            self.text = text
-            self.kind = kind
-        }
-    }
-    
     struct SenseExample: DicationaryCodableKind {
         public var id: String
         public var summary: String
         public var texts: [Text]
-        public var labels: [SenseLabel]
         public var children: [SenseExample]
         
         public var text: Text! {
@@ -130,11 +117,10 @@ public extension DictionaryCodable {
             set { texts = [newValue].compactMap { $0 } }
         }
         
-        public init(id: String, summary: String = "", text: Text = .init(id: UUID().uuidString), labels: [SenseLabel] = [], children: [SenseExample] = []) {
+        public init(id: String, summary: String = "", text: Text = .init(id: UUID().uuidString), children: [SenseExample] = []) {
             self.id = id
             self.summary = summary
             self.texts = [text]
-            self.labels = labels
             self.children = children
         }
     }
@@ -153,7 +139,10 @@ public extension DictionaryCodable {
         public var likedCount: Int?
         public var children: [Sense]
         
-        public init(id: String, text: Text = .init(id: UUID().uuidString), usageText: String? = nil, labels: [String] = [], grammarTraitLabels: [String] = [], synonyms: [String] = [], opposites: [String] = [], relatedEntries: [String] = [], examples: [SenseExample] = [], likedCount: Int? = nil, children: [Sense] = []) {
+        /// HTML to display some additional note text.
+        public var noteHTML: String
+        
+        public init(id: String, text: Text = .init(id: UUID().uuidString), usageText: String? = nil, labels: [String] = [], grammarTraitLabels: [String] = [], synonyms: [String] = [], opposites: [String] = [], relatedEntries: [String] = [], examples: [SenseExample] = [], likedCount: Int? = nil, noteHTML: String = "", children: [Sense] = []) {
             self.id = id
             self.text = text
             self.usageText = usageText
@@ -164,6 +153,7 @@ public extension DictionaryCodable {
             self.likedCount = likedCount
             self.labels = labels
             self.grammarTraitLabels = grammarTraitLabels
+            self.noteHTML = noteHTML
             self.children = children
         }
     }
@@ -176,13 +166,20 @@ public extension DictionaryCodable {
         public var phrasalVerbs: [Entry]
         public var pronunciations: [Pronunciation]
         
-        public init(id: String, partOfSpeech: CDPartOfSpeech? = nil, senses: [Sense] = [], idioms: [Entry] = [], phrasalVerbs: [Entry] = [], pronunciations: [Pronunciation] = []) {
+        /// Head info is used to display some additional information at the head of a definition group.
+        ///
+        /// Such as the inflection changes of a verb: "get and got", the degree of comparison: "good and better".
+        /// This string is expected to be parsed as MarkDown.
+        public var headInfoMDText: String = ""
+        
+        public init(id: String, partOfSpeech: CDPartOfSpeech? = nil, senses: [Sense] = [], idioms: [Entry] = [], phrasalVerbs: [Entry] = [], pronunciations: [Pronunciation] = [], headInfoMDText: String = "") {
             self.id = id
             self.partOfSpeech = partOfSpeech
             self.senses = senses
             self.idioms = idioms
             self.phrasalVerbs = phrasalVerbs
             self.pronunciations = pronunciations
+            self.headInfoMDText = headInfoMDText
         }
     }
     
