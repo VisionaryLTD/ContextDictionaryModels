@@ -37,9 +37,9 @@ public extension DictionaryCodable {
         
         public var kind: Kind {
             switch definitionGroups.first?.partOfSpeech {
-            case .phrasalVerb:
+            case "phrasalVerb":
                 return .phrasalVerb
-            case .idiom:
+            case "idiom":
                 return .idiom
             default:
                 return .word
@@ -82,6 +82,41 @@ public extension DictionaryCodable {
         
         public var unwrappedAttributedString: AttributedString {
             attributedString ?? .init(rawText)
+        }
+        
+        enum CodingKeys: CodingKey {
+            case id
+            case rawText
+            case attributedString
+            case lang
+            case translations
+            case translation
+        }
+        
+        public init(from decoder: Decoder) throws {
+            let container: KeyedDecodingContainer<DictionaryCodable.Text.CodingKeys> = try decoder.container(keyedBy: DictionaryCodable.Text.CodingKeys.self)
+            self.id = try container.decode(String.self, forKey: DictionaryCodable.Text.CodingKeys.id)
+            self.rawText = try container.decode(String.self, forKey: DictionaryCodable.Text.CodingKeys.rawText)
+            self.attributedString = try container.decodeIfPresent(AttributedString.self, forKey: DictionaryCodable.Text.CodingKeys.attributedString)
+            self.lang = try container.decode(DictionaryCodable.Text.Lang.self, forKey: DictionaryCodable.Text.CodingKeys.lang)
+            
+            if let translation = try container.decodeIfPresent(DictionaryCodable.Text.self, forKey: DictionaryCodable.Text.CodingKeys.translation) {
+                self.translations = [translation]
+            } else if let translations = try container.decodeIfPresent([DictionaryCodable.Text].self, forKey: DictionaryCodable.Text.CodingKeys.translations) {
+                self.translations = translations
+            } else {
+                self.translations = []
+            }
+        }
+        
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            
+            try container.encode(id, forKey: .id)
+            try container.encode(rawText, forKey: .rawText)
+            try container.encode(attributedString, forKey: .attributedString)
+            try container.encode(lang, forKey: .lang)
+            try container.encode(translations, forKey: .translations)
         }
         
         public init(id: String, rawText: String = "", attributedString: AttributedString? = nil, lang: Lang = .en, translation: Text? = nil) {
@@ -203,7 +238,7 @@ public extension DictionaryCodable {
     
     struct DefinitionGroup: DicationaryCodableKind {
         public var id: String
-        public var partOfSpeech: CDPartOfSpeech?
+        public var partOfSpeech: String?
         public var senses: [Sense]
         public var idioms: [Entry]
         public var phrasalVerbs: [Entry]
@@ -213,9 +248,9 @@ public extension DictionaryCodable {
         ///
         /// Such as the inflection changes of a verb: "get and got", the degree of comparison: "good and better".
         /// This string is expected to be parsed as MarkDown.
-        public var headInfoMDText: String = ""
+        public var headInfoMDText: String?
         
-        public init(id: String, partOfSpeech: CDPartOfSpeech? = nil, senses: [Sense] = [], idioms: [Entry] = [], phrasalVerbs: [Entry] = [], pronunciations: [Pronunciation] = [], headInfoMDText: String = "") {
+        public init(id: String, partOfSpeech: String? = nil, senses: [Sense] = [], idioms: [Entry] = [], phrasalVerbs: [Entry] = [], pronunciations: [Pronunciation] = [], headInfoMDText: String? = nil) {
             self.id = id
             self.partOfSpeech = partOfSpeech
             self.senses = senses

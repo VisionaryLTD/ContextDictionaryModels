@@ -71,7 +71,7 @@ public enum CDPartOfSpeech: String, CaseIterable, Codable, Hashable {
     case unknown
 }
 
-public enum CDEntryType: String, CaseIterable, Codable, Hashable {
-    case word
-    case phrasalVerb
-}
+//public enum CDEntryType: String, CaseIterable, Codable, Hashable {
+//    case word
+//    case phrasalVerb
+//}
