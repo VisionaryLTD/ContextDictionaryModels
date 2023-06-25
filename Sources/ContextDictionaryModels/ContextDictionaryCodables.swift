@@ -32,17 +32,26 @@ public extension DictionaryCodable {
         
         public var id: String
         public var text: String
-        public var kind: Kind
         public var origin: String?
         public var definitionGroups: [DefinitionGroup]
         
-        /// Text in Markdown to display some additional information about the entry, such as concise senses of the entry.
-        public var additionalMDText: String
+        public var kind: Kind {
+            switch definitionGroups.first?.partOfSpeech {
+            case .phrasalVerb:
+                return .phrasalVerb
+            case .idiom:
+                return .idiom
+            default:
+                return .word
+            }
+        }
         
-        public init(id: String, text: String = "", kind: Kind = .word, origin: String? = nil, definitionGroups: [DefinitionGroup] = [], additionalMDText: String = "") {
+        /// Text in Markdown to display some additional information about the entry, such as concise senses of the entry.
+        public var additionalMDText: String?
+        
+        public init(id: String, text: String = "", origin: String? = nil, definitionGroups: [DefinitionGroup] = [], additionalMDText: String? = nil) {
             self.id = id
             self.text = text
-            self.kind = kind
             self.origin = origin
             self.definitionGroups = definitionGroups
             self.additionalMDText = additionalMDText
@@ -59,11 +68,11 @@ public extension DictionaryCodable {
         /// Translations of the text
         ///
         /// Due to a struct can't contain recursive property, so makes it an array.
-        var translations: [Text]
+        var translations: [Text]?
         
         public var translation: Text? {
             get {
-                translations.first
+                translations?.first
             }
             
             set {
@@ -108,7 +117,7 @@ public extension DictionaryCodable {
 public extension DictionaryCodable {
     struct SenseExample: DicationaryCodableKind {
         public var id: String
-        public var summary: String
+        public var summary: String?
         public var texts: [Text]
         public var children: [SenseExample]
         
@@ -117,11 +126,45 @@ public extension DictionaryCodable {
             set { texts = [newValue].compactMap { $0 } }
         }
         
-        public init(id: String, summary: String = "", text: Text = .init(id: UUID().uuidString), children: [SenseExample] = []) {
+        public init(id: String, summary: String? = nil, text: Text = .init(id: UUID().uuidString), children: [SenseExample] = []) {
             self.id = id
             self.summary = summary
             self.texts = [text]
             self.children = children
+        }
+        
+        enum CodingKeys: CodingKey {
+            case id
+            case summary
+            case texts
+            case text
+            case children
+        }
+        
+        public init(from decoder: Decoder) throws {
+            let container: KeyedDecodingContainer<DictionaryCodable.SenseExample.CodingKeys> = try decoder.container(keyedBy: DictionaryCodable.SenseExample.CodingKeys.self)
+            
+            self.id = try container.decode(String.self, forKey: DictionaryCodable.SenseExample.CodingKeys.id)
+            self.summary = try container.decodeIfPresent(String.self, forKey: DictionaryCodable.SenseExample.CodingKeys.summary)
+            
+            if let text = try container.decodeIfPresent(DictionaryCodable.Text.self, forKey: .text) {
+                self.texts = [text]
+            } else if let texts = try container.decodeIfPresent([DictionaryCodable.Text].self, forKey: DictionaryCodable.SenseExample.CodingKeys.texts) {
+                self.texts = texts
+            } else {
+                self.texts = []
+            }
+            
+            self.children = try container.decode([DictionaryCodable.SenseExample].self, forKey: DictionaryCodable.SenseExample.CodingKeys.children)
+        }
+        
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            
+            try container.encode(id, forKey: .id)
+            try container.encode(summary, forKey: .summary)
+            try container.encode(texts, forKey: .texts)
+            try container.encode(children, forKey: .children)
         }
     }
     
@@ -140,9 +183,9 @@ public extension DictionaryCodable {
         public var children: [Sense]
         
         /// HTML to display some additional note text.
-        public var noteHTML: String
+        public var noteHTML: String?
         
-        public init(id: String, text: Text = .init(id: UUID().uuidString), usageText: String? = nil, labels: [String] = [], grammarTraitLabels: [String] = [], synonyms: [String] = [], opposites: [String] = [], relatedEntries: [String] = [], examples: [SenseExample] = [], likedCount: Int? = nil, noteHTML: String = "", children: [Sense] = []) {
+        public init(id: String, text: Text = .init(id: UUID().uuidString), usageText: String? = nil, labels: [String] = [], grammarTraitLabels: [String] = [], synonyms: [String] = [], opposites: [String] = [], relatedEntries: [String] = [], examples: [SenseExample] = [], likedCount: Int? = nil, noteHTML: String? = nil, children: [Sense] = []) {
             self.id = id
             self.text = text
             self.usageText = usageText
