@@ -40,7 +40,7 @@ public extension DictionaryCodable {
             self.id = try container.decode(String.self, forKey: DictionaryCodable.SenseExample.CodingKeys.id)
             self.summary = try container.decodeIfPresent(String.self, forKey: DictionaryCodable.SenseExample.CodingKeys.summary)
             
-            if let text = try container.decodeIfPresent(DictionaryCodable.Text.self, forKey: .text) {
+            if let text = try? container.decodeIfPresent(DictionaryCodable.Text.self, forKey: .text) {
                 self.texts = [text]
             } else if let texts = try container.decodeIfPresent([DictionaryCodable.Text].self, forKey: DictionaryCodable.SenseExample.CodingKeys.texts) {
                 self.texts = texts

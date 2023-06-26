@@ -6,6 +6,9 @@
 //
 
 import Foundation
+#if canImport(UIKit)
+import UIKit
+#endif
 
 public extension DictionaryCodable {
     struct Text: DicationaryCodableKind {
@@ -48,7 +51,7 @@ public extension DictionaryCodable {
             self.attributedString = try container.decodeIfPresent(AttributedString.self, forKey: DictionaryCodable.Text.CodingKeys.attributedString)
             self.lang = try container.decode(DictionaryCodable.Text.Lang.self, forKey: DictionaryCodable.Text.CodingKeys.lang)
             
-            if let translation = try container.decodeIfPresent(DictionaryCodable.Text.self, forKey: DictionaryCodable.Text.CodingKeys.translation) {
+            if let translation = try? container.decodeIfPresent(DictionaryCodable.Text.self, forKey: DictionaryCodable.Text.CodingKeys.translation) {
                 self.translations = [translation]
             } else if let translations = try container.decodeIfPresent([DictionaryCodable.Text].self, forKey: DictionaryCodable.Text.CodingKeys.translations) {
                 self.translations = translations

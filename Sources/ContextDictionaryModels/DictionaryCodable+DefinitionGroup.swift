@@ -22,7 +22,7 @@ public extension DictionaryCodable {
         /// This string is expected to be parsed as MarkDown.
         public var headInfoMDText: String?
         
-        public init(id: String, partOfSpeech: CDPartOfSpeech, senses: [Sense] = [], idioms: [Entry] = [], phrasalVerbs: [Entry] = [], pronunciations: [Pronunciation] = [], headInfoMDText: String? = nil) {
+        public init(id: String, partOfSpeech: CDPartOfSpeech = .verb, senses: [Sense] = [], idioms: [Entry] = [], phrasalVerbs: [Entry] = [], pronunciations: [Pronunciation] = [], headInfoMDText: String? = nil) {
             self.id = id
             self.partOfSpeech = partOfSpeech
             self.senses = senses
@@ -42,12 +42,12 @@ public extension DictionaryCodable {
             self.pronunciations = try container.decode([DictionaryCodable.Pronunciation].self, forKey: DictionaryCodable.DefinitionGroup.CodingKeys.pronunciations)
             self.headInfoMDText = try container.decodeIfPresent(String.self, forKey: DictionaryCodable.DefinitionGroup.CodingKeys.headInfoMDText)
             
-            if let pos = try container.decodeIfPresent(CDPartOfSpeech.self, forKey: .partOfSpeech) {
+            if let pos = try? container.decodeIfPresent(CDPartOfSpeech.self, forKey: .partOfSpeech) {
                 self.partOfSpeech = pos
             } else if let posString = try container.decodeIfPresent(String.self, forKey: .partOfSpeech) {
                 self.partOfSpeech = .init(posString)
             } else {
-                fatalError()
+                throw DecodingError.typeMismatch(CDPartOfSpeech.self, .init(codingPath: [CodingKeys.partOfSpeech], debugDescription: "can't decode part of speech"))
             }
         }
         
