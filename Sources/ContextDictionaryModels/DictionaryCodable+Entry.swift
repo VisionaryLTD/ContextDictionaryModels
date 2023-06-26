@@ -42,11 +42,11 @@ public extension DictionaryCodable {
             
             switch kind {
             case .phrasalVerb:
-                guard definitionGroups.count == 1 else {
+                guard definitionGroups.isEmpty == false else {
                     throw DicationaryCodableError.invalid("phrasal verb's definition group can't be empty or more than one")
                 }
             case .idiom:
-                guard definitionGroups.count == 1 else {
+                guard definitionGroups.isEmpty == false else {
                     throw DicationaryCodableError.invalid("idiom's definition group can't be empty or more than one")
                 }
             default: break
