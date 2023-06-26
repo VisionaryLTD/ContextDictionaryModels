@@ -7,71 +7,35 @@
 
 import Foundation
 
-public enum CDGrammarTrait: String, CaseIterable, Codable, Hashable {
-    case intransitive
-    case transitive
-    case uncountable
-    case countable
-    case singular
-    case plural
-    case noPassive
-    case usuallyPassive
-    case usuallySingular
-    case onlyBeforeNoun
-    case oftenPassive
-    case linkingVerb
-}
-
-public enum CDSenseLabel: String, Codable, Hashable {
-    case usuallyDisapproving
-    case literary
-    case informal
-    case formal
-    case humorous
-    case oldFashioned
-    case saying
-    case brE
-    case nAE
-    case slang
-    case figurative
-    case phonetics
-    case disapproving
-    case computing
-    case politics
-    case colloquial
-    case obsolete
-}
-
-public enum CDPartOfSpeech: String, CaseIterable, Codable, Hashable {
-    case verb
-    case noun
-    case adverb
-    case adjective
-    case definiteArticle
-    case indefiniteArticle
-    case infinitiveMarker
-    case phrasalVerb
-    case modalVerb
-    case exclamation
-    case preposition
-    case pronoun
-    case interjection
-    case idiom
-    case conjunction
-    case determiner
-    case number
-    case none
-    case abbreviation
-    case symbol
-    case suffix
-    case prefix
-    case combiningForm
-    case shortForm
+public struct CDPartOfSpeech: Codable, Hashable {
+    public let value: String
     
-    case unknown
+    static var possiblePhrasalVerbValues: [String] {
+        ["phrasalVerb", "phrasal verb", "phrasal_verb"]
+    }
+    
+    public init(value: String) {
+        if Self.possiblePhrasalVerbValues.contains(value) {
+            self = .phrasalVerb
+        } else if let pos = Self.allCases.first(where: { $0.value == value.lowercased().trimmingCharacters(in: .whitespacesAndNewlines) }) {
+            self = pos
+        } else {
+            self.value = value
+        }
+    }
 }
 
-//public enum CDEntryType: String, CaseIterable, Codable, Hashable {
-//    case word
-//    case phrasalVerb
-//}
+public extension CDPartOfSpeech {
+    static let verb: Self = .init(value: "verb")
+    static let noun: Self = .init(value: "noun")
+    static let adverb: Self = .init(value: "adverb")
+    static let adjective: Self = .init(value: "adjective")
+    static let idiom: Self = .init(value: "idiom")
+    static let phrasalVerb: Self = .init(value: "phrasalVerb")
+}
+
+public extension CDPartOfSpeech {
+    static var allCases: [CDPartOfSpeech] {
+        [.verb, .noun, .adverb, .adjective, .adjective]
+    }
+}
