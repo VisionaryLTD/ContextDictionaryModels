@@ -21,9 +21,8 @@ public extension DictionaryCodable {
         
         public var kind: Kind {
             switch definitionGroups.first?.partOfSpeech {
-                // FIXME:
-            case "phrasalVerb", "phrasal verb", "phrasal_verb": return .phrasalVerb
-            case "idiom": return .idiom
+            case CDPartOfSpeech.phrasalVerb: return .phrasalVerb
+            case CDPartOfSpeech.idiom: return .idiom
             default: return .word
             }
         }

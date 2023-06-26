@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  DictionaryCodable+Sense.swift
 //  
 //
 //  Created by Kai Shao on 2023/6/26.

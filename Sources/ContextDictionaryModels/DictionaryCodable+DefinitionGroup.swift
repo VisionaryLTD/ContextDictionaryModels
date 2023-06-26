@@ -10,7 +10,7 @@ import Foundation
 public extension DictionaryCodable {
     struct DefinitionGroup: DicationaryCodableKind {
         public var id: String
-        public var partOfSpeech: String?
+        public var partOfSpeech: CDPartOfSpeech
         public var senses: [Sense]
         public var idioms: [Entry]
         public var phrasalVerbs: [Entry]
@@ -22,7 +22,7 @@ public extension DictionaryCodable {
         /// This string is expected to be parsed as MarkDown.
         public var headInfoMDText: String?
         
-        public init(id: String, partOfSpeech: String? = nil, senses: [Sense] = [], idioms: [Entry] = [], phrasalVerbs: [Entry] = [], pronunciations: [Pronunciation] = [], headInfoMDText: String? = nil) {
+        public init(id: String, partOfSpeech: CDPartOfSpeech, senses: [Sense] = [], idioms: [Entry] = [], phrasalVerbs: [Entry] = [], pronunciations: [Pronunciation] = [], headInfoMDText: String? = nil) {
             self.id = id
             self.partOfSpeech = partOfSpeech
             self.senses = senses
@@ -30,6 +30,47 @@ public extension DictionaryCodable {
             self.phrasalVerbs = phrasalVerbs
             self.pronunciations = pronunciations
             self.headInfoMDText = headInfoMDText
+        }
+        
+        public init(from decoder: Decoder) throws {
+            let container: KeyedDecodingContainer<DictionaryCodable.DefinitionGroup.CodingKeys> = try decoder.container(keyedBy: DictionaryCodable.DefinitionGroup.CodingKeys.self)
+            
+            self.id = try container.decode(String.self, forKey: DictionaryCodable.DefinitionGroup.CodingKeys.id)
+            self.senses = try container.decode([DictionaryCodable.Sense].self, forKey: DictionaryCodable.DefinitionGroup.CodingKeys.senses)
+            self.idioms = try container.decode([DictionaryCodable.Entry].self, forKey: DictionaryCodable.DefinitionGroup.CodingKeys.idioms)
+            self.phrasalVerbs = try container.decode([DictionaryCodable.Entry].self, forKey: DictionaryCodable.DefinitionGroup.CodingKeys.phrasalVerbs)
+            self.pronunciations = try container.decode([DictionaryCodable.Pronunciation].self, forKey: DictionaryCodable.DefinitionGroup.CodingKeys.pronunciations)
+            self.headInfoMDText = try container.decodeIfPresent(String.self, forKey: DictionaryCodable.DefinitionGroup.CodingKeys.headInfoMDText)
+            
+            if let pos = try container.decodeIfPresent(CDPartOfSpeech.self, forKey: .partOfSpeech) {
+                self.partOfSpeech = pos
+            } else if let posString = try container.decodeIfPresent(String.self, forKey: .partOfSpeech) {
+                self.partOfSpeech = .init(posString)
+            } else {
+                fatalError()
+            }
+        }
+        
+        enum CodingKeys: CodingKey {
+            case id
+            case partOfSpeech
+            case senses
+            case idioms
+            case phrasalVerbs
+            case pronunciations
+            case headInfoMDText
+        }
+        
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: DictionaryCodable.DefinitionGroup.CodingKeys.self)
+            
+            try container.encode(self.id, forKey: DictionaryCodable.DefinitionGroup.CodingKeys.id)
+            try container.encode(self.partOfSpeech, forKey: DictionaryCodable.DefinitionGroup.CodingKeys.partOfSpeech)
+            try container.encode(self.senses, forKey: DictionaryCodable.DefinitionGroup.CodingKeys.senses)
+            try container.encode(self.idioms, forKey: DictionaryCodable.DefinitionGroup.CodingKeys.idioms)
+            try container.encode(self.phrasalVerbs, forKey: DictionaryCodable.DefinitionGroup.CodingKeys.phrasalVerbs)
+            try container.encode(self.pronunciations, forKey: DictionaryCodable.DefinitionGroup.CodingKeys.pronunciations)
+            try container.encodeIfPresent(self.headInfoMDText, forKey: DictionaryCodable.DefinitionGroup.CodingKeys.headInfoMDText)
         }
         
         public func validate() throws {
