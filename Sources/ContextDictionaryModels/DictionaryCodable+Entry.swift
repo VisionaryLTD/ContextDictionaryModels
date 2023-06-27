@@ -49,7 +49,10 @@ public extension DictionaryCodable {
                 guard definitionGroups.isEmpty == false else {
                     throw DicationaryCodableError.invalid("idiom's definition group can't be empty or more than one")
                 }
-            default: break
+            default:
+                guard definitionGroups.isEmpty == false else {
+                    throw DicationaryCodableError.invalid("definition group can't be empty or more than one")
+                }
             }
         }
     }
