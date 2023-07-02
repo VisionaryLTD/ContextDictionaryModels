@@ -18,6 +18,9 @@ public extension DictionaryCodable {
         public var id: String
         public var text: String
         public var definitionGroups: [DefinitionGroup]
+        public var extID: String?
+        public var extVersion: String?
+        public var extImageData: Data?
         
         public var kind: Kind {
             switch definitionGroups.first?.partOfSpeech {
