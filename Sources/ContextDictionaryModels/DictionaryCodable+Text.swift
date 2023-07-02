@@ -101,9 +101,9 @@ public extension DictionaryCodable {
         }
 
         public func validate() throws {
-            guard !rawText.isEmpty else {
-                throw DicationaryCodableError.invalid("Text's raw text can't be empty")
-            }
+//            guard !rawText.isEmpty else {
+//                throw DicationaryCodableError.invalid("Text's raw text can't be empty")
+//            }
         }
     }
 }
