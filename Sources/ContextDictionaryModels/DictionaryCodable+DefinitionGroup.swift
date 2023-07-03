@@ -16,6 +16,9 @@ public extension DictionaryCodable {
         public var phrasalVerbs: [Entry]
         public var pronunciations: [Pronunciation]
         
+        // sometimes the text under definitionGroup is different from the entry's
+        public var text: String?
+        
         /// Head info is used to display some additional information at the head of a definition group.
         ///
         /// Such as the inflection changes of a verb: "get and got", the degree of comparison: "good and better".
