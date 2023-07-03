@@ -15,12 +15,31 @@ public extension DictionaryCodable {
             public func validate() throws {}
         }
         
+        public struct ExtensionInfo: DicationaryCodableKind {
+            public var extID: String
+            public var title: String
+            public var version: String
+            public var imageData: Data?
+            public var copyright: String?
+            
+            public init(extID: String, title: String, version: String, imageData: Data? = nil, copyright: String? = nil) {
+                self.extID = extID
+                self.title = title
+                self.version = version
+                self.imageData = imageData
+                self.copyright = copyright
+            }
+            
+            public func validate() throws {
+                
+            }
+        }
+        
         public var id: String
         public var text: String
         public var definitionGroups: [DefinitionGroup]
-        public var extID: String?
-        public var extVersion: String?
-        public var extImageData: Data?
+        public var sourceURL: URL?
+        public var extInfo: ExtensionInfo?
         
         public var kind: Kind {
             switch definitionGroups.first?.partOfSpeech {
