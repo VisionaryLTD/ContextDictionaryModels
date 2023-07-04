@@ -16,13 +16,15 @@ public extension DictionaryCodable {
         }
         
         public struct ExtensionInfo: DicationaryCodableKind {
+            public var id: String
             public var extID: String
             public var title: String
             public var version: String
             public var imageData: Data?
             public var copyright: String?
             
-            public init(extID: String, title: String, version: String, imageData: Data? = nil, copyright: String? = nil) {
+            public init(id: String, extID: String, title: String, version: String, imageData: Data? = nil, copyright: String? = nil) {
+                self.id = id
                 self.extID = extID
                 self.title = title
                 self.version = version
