@@ -22,6 +22,14 @@ public extension DictionaryCodable {
         public var likedCount: Int?
         public var children: [Sense]
         
+        public var firstInnerMostSense: Sense {
+            if children.isEmpty {
+                return self
+            }
+            
+            return children[0].firstInnerMostSense
+        }
+        
         /// HTML to display some additional note text.
         public var noteHTML: String?
         

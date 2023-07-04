@@ -35,6 +35,16 @@ public extension DictionaryCodable {
             attributedString ?? .init(rawText)
         }
         
+        public func displayText() -> String {
+            var string = rawText.trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            if let translation = translation?.rawText {
+                string += " \(translation.trimmingCharacters(in: .whitespacesAndNewlines))"
+            }
+            
+            return string.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+        
         enum CodingKeys: CodingKey {
             case id
             case rawText

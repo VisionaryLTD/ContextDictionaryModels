@@ -43,6 +43,14 @@ public extension DictionaryCodable {
         public var sourceURL: URL?
         public var extInfo: ExtensionInfo?
         
+        public var searchItemDescription: Text? {
+            guard let sense = definitionGroups.first?.senses.first?.firstInnerMostSense else {
+                return nil
+            }
+            
+            return sense.text
+        }
+        
         public var kind: Kind {
             switch definitionGroups.first?.partOfSpeech {
             case CDPartOfSpeech.phrasalVerb: return .phrasalVerb
