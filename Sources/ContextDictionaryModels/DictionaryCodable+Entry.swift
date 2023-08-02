@@ -8,6 +8,26 @@
 import Foundation
 
 public extension DictionaryCodable {
+    struct ExtensionInfo: DicationaryCodableKind {
+        public var id: String
+        public var extID: String
+        public var title: String
+        public var version: String
+        public var copyright: String?
+        
+        public init(id: String, extID: String, title: String, version: String, copyright: String? = nil) {
+            self.id = id
+            self.extID = extID
+            self.title = title
+            self.version = version
+            self.copyright = copyright
+        }
+        
+        public func validate() throws {
+            
+        }
+    }
+    
     struct Entry: DicationaryCodableKind {
         public enum Kind: String, DicationaryCodableKind {
             case word, phrasalVerb, idiom
@@ -15,33 +35,14 @@ public extension DictionaryCodable {
             public func validate() throws {}
         }
         
-        public struct ExtensionInfo: DicationaryCodableKind {
-            public var id: String
-            public var extID: String
-            public var title: String
-            public var version: String
-            public var imageData: Data?
-            public var copyright: String?
-            
-            public init(id: String, extID: String, title: String, version: String, imageData: Data? = nil, copyright: String? = nil) {
-                self.id = id
-                self.extID = extID
-                self.title = title
-                self.version = version
-                self.imageData = imageData
-                self.copyright = copyright
-            }
-            
-            public func validate() throws {
-                
-            }
-        }
         
         public var id: String
         public var text: String
         public var definitionGroups: [DefinitionGroup]
         public var sourceURL: URL?
-        public var extInfo: ExtensionInfo?
+        public var keyword: String?
+        public var extID: String?
+        public var extVersion: String?
         
         public var searchItemDescription: Text? {
             guard let sense = definitionGroups.first?.senses.first?.firstInnerMostSense else {
