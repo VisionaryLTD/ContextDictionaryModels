@@ -52,6 +52,16 @@ public extension DictionaryCodable {
             return sense.text
         }
         
+        public var pronunText: String? {
+            guard let pronuns = definitionGroups.first?.pronunciations, !pronuns.isEmpty else {
+                return nil
+            }
+            
+            return pronuns.map { item in
+                "\(item.geoKind) \(item.phoneticAlphabet)"
+            }.joined(separator: " ")
+        }
+        
         public var kind: Kind {
             switch definitionGroups.first?.partOfSpeech {
             case CDPartOfSpeech.phrasalVerb: return .phrasalVerb
