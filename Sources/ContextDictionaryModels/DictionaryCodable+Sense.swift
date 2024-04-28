@@ -53,3 +53,17 @@ public extension DictionaryCodable {
         }
     }
 }
+
+public extension DictionaryCodable.Sense {
+    var innerSenses: [DictionaryCodable.Sense] {
+        var senses: [DictionaryCodable.Sense] = []
+        
+        if children.isEmpty {
+            senses.append(self)
+        } else {
+            senses.append(contentsOf: children.flatMap(\.innerSenses))
+        }
+        
+        return senses
+    }
+}
