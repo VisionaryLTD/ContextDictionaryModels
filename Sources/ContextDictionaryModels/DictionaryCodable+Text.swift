@@ -59,9 +59,9 @@ public extension DictionaryCodable {
             self.id = try container.decode(String.self, forKey: DictionaryCodable.Text.CodingKeys.id)
             self.rawText = try container.decode(String.self, forKey: DictionaryCodable.Text.CodingKeys.rawText)
             #if !os(Linux)
-            self.attributedString = try container.decodeIfPresent(AttributedString.self, forKey: DictionaryCodable.Text.CodingKeys.attributedString)
+                self.attributedString = try container.decodeIfPresent(AttributedString.self, forKey: DictionaryCodable.Text.CodingKeys.attributedString)
             #else
-            self.attributedString = nil
+                self.attributedString = nil
             #endif
             self.lang = try container.decode(DictionaryCodable.Text.Lang.self, forKey: DictionaryCodable.Text.CodingKeys.lang)
             
@@ -79,9 +79,12 @@ public extension DictionaryCodable {
             
             try container.encode(id, forKey: .id)
             try container.encode(rawText, forKey: .rawText)
-            try container.encode(attributedString, forKey: .attributedString)
             try container.encode(lang, forKey: .lang)
             try container.encode(translations, forKey: .translations)
+            
+            #if !os(Linux)
+                try container.encode(attributedString, forKey: .attributedString)
+            #endif
         }
         
         public init(id: String, rawText: String = "", attributedString: AttributedString? = nil, lang: Lang = .en, translation: Text? = nil) {
