@@ -58,7 +58,11 @@ public extension DictionaryCodable {
             let container: KeyedDecodingContainer<DictionaryCodable.Text.CodingKeys> = try decoder.container(keyedBy: DictionaryCodable.Text.CodingKeys.self)
             self.id = try container.decode(String.self, forKey: DictionaryCodable.Text.CodingKeys.id)
             self.rawText = try container.decode(String.self, forKey: DictionaryCodable.Text.CodingKeys.rawText)
+            #if !os(Linux)
             self.attributedString = try container.decodeIfPresent(AttributedString.self, forKey: DictionaryCodable.Text.CodingKeys.attributedString)
+            #else
+            self.attributedString = nil
+            #endif
             self.lang = try container.decode(DictionaryCodable.Text.Lang.self, forKey: DictionaryCodable.Text.CodingKeys.lang)
             
             if let translation = try? container.decodeIfPresent(DictionaryCodable.Text.self, forKey: DictionaryCodable.Text.CodingKeys.translation) {
